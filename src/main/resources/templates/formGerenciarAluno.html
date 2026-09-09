@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Gerenciar Aluno - Sistema de Matrícula</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .card {
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark mb-5">
+    <div class="container">
+
+        <a class="navbar-brand" th:href="@{/}">
+            <i class="bi bi-mortarboard-fill me-2"></i>
+            Sistema de Matrícula
+        </a>
+
+    </div>
+</nav>
+
+
+<div class="container">
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+            Gerenciar Aluno
+        </h2>
+
+        <p class="text-muted">
+            Altere os dados do aluno cadastrado.
+        </p>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form th:action="@{/aluno/atualizar}"
+                  method="post">
+
+                <!-- ID DO ALUNO -->
+                <input type="hidden"
+                       name="idAluno"
+                       th:value="${aluno.idAluno}">
+
+
+                <div class="row g-3">
+
+                    <!-- NOME -->
+                    <div class="col-md-8">
+
+                        <label class="form-label">
+                            Nome
+                        </label>
+
+                        <input type="text"
+                               name="nome"
+                               class="form-control"
+                               th:value="${aluno.nome}"
+                               required>
+
+                    </div>
+
+
+                    <!-- IDADE -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Idade
+                        </label>
+
+                        <input type="number"
+                               name="idade"
+                               class="form-control"
+                               th:value="${aluno.idade}"
+                               required>
+
+                    </div>
+
+
+                    <!-- PRONTUÁRIO -->
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Prontuário
+                        </label>
+
+                        <input type="text"
+                               name="prontuario"
+                               class="form-control"
+                               th:value="${aluno.prontuario}"
+                               required>
+
+                    </div>
+
+
+                    <!-- CURSO -->
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Curso
+                        </label>
+
+                        <select name="idCurso"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                Selecione o curso
+                            </option>
+
+                            <option th:each="curso : ${cursos}"
+                                    th:value="${curso.idCurso}"
+                                    th:text="${curso.nome}"
+                                    th:selected="${curso.idCurso == aluno.idCurso}">
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- RESPONSÁVEL -->
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Nome do Responsável
+                        </label>
+
+                        <input type="text"
+                               name="nomeResponsavel"
+                               class="form-control"
+                               th:value="${aluno.nomeResponsavel}"
+                               required>
+
+                    </div>
+
+
+                    <!-- CONTATO -->
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Contato do Responsável
+                        </label>
+
+                        <input type="text"
+                               name="contatoResponsavel"
+                               class="form-control"
+                               th:value="${aluno.contatoResponsavel}"
+                               required>
+
+                    </div>
+
+
+                    <!-- ENDEREÇO -->
+                    <div class="col-md-8">
+
+                        <label class="form-label">
+                            Endereço
+                        </label>
+
+                        <input type="text"
+                               name="endereco"
+                               class="form-control"
+                               th:value="${aluno.endereco}"
+                               required>
+
+                    </div>
+
+
+                    <!-- CIDADE -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Cidade
+                        </label>
+
+                        <input type="text"
+                               name="cidade"
+                               class="form-control"
+                               th:value="${aluno.cidade}"
+                               required>
+
+                    </div>
+
+
+                    <!-- UF -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            UF
+                        </label>
+
+                        <select name="uf"
+                                class="form-select"
+                                required>
+
+                            <option th:each="estado : ${ufs}"
+                                    th:value="${estado}"
+                                    th:text="${estado}"
+                                    th:selected="${estado.toString() == aluno.uf}">
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TELEFONE -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Telefone
+                        </label>
+
+                        <input type="text"
+                               name="telefone"
+                               class="form-control"
+                               th:value="${aluno.telefone}"
+                               required>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            E-mail
+                        </label>
+
+                        <input type="email"
+                               name="email"
+                               class="form-control"
+                               th:value="${aluno.email}"
+                               required>
+
+                    </div>
+
+                </div>
+
+
+                <hr class="my-4">
+
+
+                <div class="d-flex justify-content-between">
+
+                    <!-- VOLTAR -->
+                    <a th:href="@{/aluno/listar}"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-arrow-left me-1"></i>
+
+                        Voltar
+
+                    </a>
+
+
+                    <div>
+
+                        <!-- EXCLUIR -->
+                        <button type="button"
+                                class="btn btn-danger me-2"
+                                onclick="excluirAluno()">
+
+                            <i class="bi bi-trash me-1"></i>
+
+                            Excluir
+
+                        </button>
+
+
+                        <!-- SALVAR -->
+                        <button type="submit"
+                                class="btn btn-success">
+
+                            <i class="bi bi-check-lg me-1"></i>
+
+                            Salvar alterações
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+
+            <!-- FORMULÁRIO SEPARADO PARA EXCLUSÃO -->
+            <form id="formExcluir"
+                  th:action="@{/aluno/excluir}"
+                  method="post">
+
+                <input type="hidden"
+                       name="idAluno"
+                       th:value="${aluno.idAluno}">
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function excluirAluno() {
+
+    if (confirm(
+        'Tem certeza que deseja excluir este aluno? Essa ação não pode ser desfeita.'
+    )) {
+
+        document.getElementById('formExcluir').submit();
+
+    }
+
+}
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+</html>

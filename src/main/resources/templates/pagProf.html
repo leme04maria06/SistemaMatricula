@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Matrícula - Painel Principal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .card-entidade {
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            border: none;
+            border-radius: 14px;
+        }
+        .card-entidade:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+        .icon-wrap {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 0.75rem;
+        }
+        .navbar-brand {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark mb-5">
+    <div class="container">
+        <span class="navbar-brand">
+            <i class="bi bi-mortarboard-fill me-2"></i>Sistema de Matrícula
+        </span>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="mb-4">
+        <h2 class="fw-bold">Painel do professor</h2>
+        <p class="text-muted">Área do professor.</p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Disciplina -->
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card card-entidade h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="icon-wrap bg-success-subtle text-success">
+                        <i class="bi bi-journal-bookmark-fill"></i>
+                    </div>
+                    <h5 class="card-title">Disciplina</h5>
+                    <p class="card-text text-muted">Cadastro, edição e exclusão de disciplinas.</p>
+                    <a th:href="@{/disciplina/listar}" class="btn btn-success btn-sm">
+                        <i class="bi bi-list-ul me-1"></i>Gerenciar
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Matrícula -->
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card card-entidade h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="icon-wrap bg-danger-subtle text-danger">
+                        <i class="bi bi-clipboard2-check-fill"></i>
+                    </div>
+                    <h5 class="card-title">Matrícula</h5>
+                    <p class="card-text text-muted">Visualizar os alunos que se inscreveram em suas disciplinas.</p>
+                    <a th:href="@{/professor/matriculas}" class="btn btn-danger">
+                        Matrícula
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
