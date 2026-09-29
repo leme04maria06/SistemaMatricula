@@ -1,15 +1,12 @@
 package com.example.matriculadisciplina.Repository;
 
 import java.util.List;
-
 import org.springframework.stereotype.Repository;
-
-import com.example.matriculadisciplina.Model.Aluno;
-import com.example.matriculadisciplina.Model.OfertaDisciplina;
-
+import com.example.matriculadisciplina.Model.Matricula;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 
 @Repository
@@ -18,127 +15,64 @@ public class MatriculaRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public boolean existeMatricula(
-            Aluno aluno,
-            OfertaDisciplina oferta) {
-
+    @Transactional
+    public boolean insert(Matricula matricula) {
         String comando = """
-            SELECT COUNT(*)
-            FROM matricula
-            WHERE id_aluno = :idAluno
-            AND id_oferta = :idOferta
+            INSERT INTO matricula (id_aluno, id_oferta, data_matricula, status)
+            VALUES (:aluno, :oferta, :dataMatricula, :status)
             """;
-
         Query query = em.createNativeQuery(comando);
-
-        query.setParameter("idAluno", aluno.getIdAluno());
-        query.setParameter("idOferta", oferta.getIdOferta());
-
-        Number resultado = (Number) query.getSingleResult();
-
-        return resultado.intValue() > 0;
+        query.setParameter("aluno", matricula.getAluno().getIdAluno());
+        query.setParameter("oferta", matricula.getOferta().getIdOferta());
+        query.setParameter("dataMatricula", matricula.getDataMatricula());
+        query.setParameter("status", matricula.getStatus());
+        return query.executeUpdate() == 1;
     }
 
-    @Transactional
-    public boolean inserir(
-            Aluno aluno,
-            OfertaDisciplina oferta) {
+    @SuppressWarnings("unchecked")
+    public List<Matricula> findAll() {
+        String comando = """
+            SELECT * FROM matricula ORDER BY data_matricula
+            """;
+        return em.createNativeQuery(comando, Matricula.class).getResultList();
+    }
 
+    public Matricula findById(int id) {
+        String comando = """
+            SELECT * FROM matricula WHERE id_matricula = :id
+            """;
         try {
-
-            String comando = """
-                INSERT INTO matricula
-                (id_aluno, id_oferta)
-                VALUES
-                (:idAluno, :idOferta)
-                """;
-
-            Query query = em.createNativeQuery(comando);
-
-            query.setParameter("idAluno", aluno.getIdAluno());
-            query.setParameter("idOferta", oferta.getIdOferta());
-
-            query.executeUpdate();
-
-            return true;
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            return false;
+            return (Matricula) em.createNativeQuery(comando, Matricula.class)
+                    .setParameter("id", id).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         }
     }
 
-    public List<Object[]> findMatriculasByAluno(int idAluno) {
-
+    @Transactional
+    public void update(Matricula matricula) {
         String comando = """
-            SELECT
-                m.id_matricula,
-                d.nome AS disciplina,
-                p.nome AS professor,
-                od.ano,
-                od.semestre
-            FROM matricula m
-
-            INNER JOIN oferta_disciplina od
-                ON m.id_oferta = od.id_oferta
-
-            INNER JOIN disciplina d
-                ON od.id_disciplina = d.id_disciplina
-
-            INNER JOIN professor pr
-                ON od.id_professor = pr.id_pessoa
-
-            INNER JOIN pessoa p
-                ON pr.id_pessoa = p.id_pessoa
-
-            WHERE m.id_aluno = :idAluno
-
-            ORDER BY od.ano, od.semestre, d.nome
+            UPDATE matricula
+            SET id_aluno = :aluno,
+                id_oferta = :oferta,
+                data_matricula = :dataMatricula,
+                status = :status
+            WHERE id_matricula = :id
             """;
-
         Query query = em.createNativeQuery(comando);
-
-        query.setParameter("idAluno", idAluno);
-
-        return query.getResultList();
+        query.setParameter("aluno", matricula.getAluno().getIdAluno());
+        query.setParameter("oferta", matricula.getOferta().getIdOferta());
+        query.setParameter("dataMatricula", matricula.getDataMatricula());
+        query.setParameter("status", matricula.getStatus());
+        query.setParameter("id", matricula.getIdMatricula());
+        query.executeUpdate();
     }
 
-
-    public List<Object[]> findMatriculasByProfessor(int idProfessor) {
-
+    @Transactional
+    public void delete(int id) {
         String comando = """
-            SELECT
-                m.id_matricula,
-                d.nome AS disciplina,
-                p.nome AS aluno,
-                a.prontuario,
-                od.ano,
-                od.semestre
-            FROM matricula m
-
-            INNER JOIN oferta_disciplina od
-                ON m.id_oferta = od.id_oferta
-
-            INNER JOIN disciplina d
-                ON od.id_disciplina = d.id_disciplina
-
-            INNER JOIN aluno a
-                ON m.id_aluno = a.id_pessoa
-
-            INNER JOIN pessoa p
-                ON a.id_pessoa = p.id_pessoa
-
-            WHERE od.id_professor = :idProfessor
-
-            ORDER BY od.ano, od.semestre, d.nome, p.nome
+            DELETE FROM matricula WHERE id_matricula = :id
             """;
-
-        Query query = em.createNativeQuery(comando);
-
-        query.setParameter("idProfessor", idProfessor);
-
-        return query.getResultList();
+        em.createNativeQuery(comando).setParameter("id", id).executeUpdate();
     }
 }
